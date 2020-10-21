@@ -16,8 +16,7 @@ def normalize(position):
     block_position : tuple of ints of len 3
 
     """
-    x, y, z = position
-    x, y, z = (int(round(x)), int(round(y)), int(round(z)))
+    x, y, z = [int(round(a)) for a in position]
     return x, y, z
 
 
@@ -33,8 +32,7 @@ def sectorize(position):
     sector : tuple of len 3
 
     """
-    x, y, z = normalize(position)
-    x, y, z = x // SECTOR_SIZE, y // SECTOR_SIZE, z // SECTOR_SIZE
+    x, y, z = [a // SECTOR_SIZE for a in normalize(position)]
     return x, 0, z
 
 

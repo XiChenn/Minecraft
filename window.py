@@ -2,7 +2,7 @@ from pyglet.gl import *
 from pyglet.window import key, mouse
 from model import Model
 from utils import *
-from config import *
+from config import FLYING_SPEED, WALKING_SPEED, TERMINAL_VELOCITY, PLAYER_HEIGHT, FACES, TICKS_PER_SEC
 
 
 class Window(pyglet.window.Window):

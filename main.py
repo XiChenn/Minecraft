@@ -3,9 +3,7 @@ from window import Window
 
 
 def setup_fog():
-    """ Configure the OpenGL fog properties.
-
-    """
+    """ Configure the OpenGL fog properties. """
     # Enable fog. Fog "blends a fog color with each rasterized pixel fragment's
     # post-texturing color."
     glEnable(GL_FOG)
@@ -22,9 +20,7 @@ def setup_fog():
 
 
 def setup():
-    """ Basic OpenGL configuration.
-
-    """
+    """ Basic OpenGL configuration. """
     # Set the color of "clear", i.e. the sky, in rgba.
     glClearColor(0.5, 0.69, 1.0, 1)
     # Enable culling (not rendering) of back-facing facets -- facets that aren't
@@ -37,11 +33,11 @@ def setup():
     # as smooth."
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-    setup_fog()
+    # setup_fog()
 
 
 def main():
-    window = Window(width=800, height=600, caption='MineCraft', resizable=True)
+    window = Window(width=1280, height=720, caption='MineCraft', resizable=True)  # fullscreen=True
     # Hide the mouse cursor and prevent the mouse from leaving the window.
     window.set_exclusive_mouse(True)
     setup()

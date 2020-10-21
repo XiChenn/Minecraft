@@ -6,7 +6,7 @@ from pyglet import image
 from pyglet.gl import *
 from pyglet.graphics import TextureGroup
 from utils import *
-from config import *
+from config import FACES, TICKS_PER_SEC, TEXTURE_PATH
 
 
 class Model:
