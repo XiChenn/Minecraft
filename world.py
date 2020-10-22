@@ -1,15 +1,16 @@
 import random
 import time
-from collections import deque
+import pyglet.gl as gl
+import pyglet
 
-from pyglet import image
-from pyglet.gl import *
-from pyglet.graphics import TextureGroup
 from utils import *
+from collections import deque
+from pyglet.graphics import TextureGroup
 from config import FACES, TICKS_PER_SEC, TEXTURE_PATH
 
 
 class Model:
+    """Models the world as blocks in 3D grid"""
 
     def __init__(self):
 
@@ -17,7 +18,7 @@ class Model:
         self.batch = pyglet.graphics.Batch()
 
         # A TextureGroup manages an OpenGL texture.
-        self.group = TextureGroup(image.load(TEXTURE_PATH).get_texture())
+        self.group = TextureGroup(pyglet.image.load(TEXTURE_PATH).get_texture())
 
         # A mapping from position to the texture of the block at that position.
         # This defines all the blocks that are currently in the world.
@@ -209,7 +210,7 @@ class Model:
         texture_data = list(texture)
         # create vertex list
         # FIXME Maybe `add_indexed()` should be used instead
-        self._shown[position] = self.batch.add(24, GL_QUADS, self.group,
+        self._shown[position] = self.batch.add(24, gl.GL_QUADS, self.group,
             ('v3f/static', vertex_data),
             ('t2f/static', texture_data))
 

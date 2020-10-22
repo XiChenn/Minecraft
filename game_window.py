@@ -1,14 +1,16 @@
-from pyglet.gl import *
+import pyglet.gl as gl
+import pyglet
+
 from pyglet.window import key, mouse
-from model import Model
+from world import Model
 from utils import *
 from config import FLYING_SPEED, WALKING_SPEED, TERMINAL_VELOCITY, PLAYER_HEIGHT, FACES, TICKS_PER_SEC
 
 
-class Window(pyglet.window.Window):
+class GameWindow(pyglet.window.Window):
 
     def __init__(self, *args, **kwargs):
-        super(Window, self).__init__(*args, **kwargs)
+        super(GameWindow, self).__init__(*args, **kwargs)
 
         # Whether or not the window exclusively captures the mouse.
         self.exclusive = False
@@ -61,8 +63,8 @@ class Window(pyglet.window.Window):
 
         # The label that is displayed in the top left of the canvas.
         self.label = pyglet.text.Label('', font_name='Arial', font_size=18,
-            x=10, y=self.height - 10, anchor_x='left', anchor_y='top',
-            color=(0, 0, 0, 255))
+                                       x=10, y=self.height - 10, anchor_x='left', anchor_y='top',
+                                       color=(0, 0, 0, 255))
 
         # This call schedules the `update()` method to be called
         # TICKS_PER_SEC. This is the main game event loop.
@@ -73,7 +75,7 @@ class Window(pyglet.window.Window):
         the game will ignore the mouse.
 
         """
-        super(Window, self).set_exclusive_mouse(exclusive)
+        super(GameWindow, self).set_exclusive_mouse(exclusive)
         self.exclusive = exclusive
 
     def get_sight_vector(self):
@@ -166,7 +168,7 @@ class Window(pyglet.window.Window):
         """
         # walking
         speed = FLYING_SPEED if self.flying else WALKING_SPEED
-        d = dt * speed # distance covered this tick.
+        d = dt * speed  # distance covered this tick.
         dx, dy, dz = self.get_motion_vector()
         # New position in space, before accounting for gravity.
         dx, dy, dz = dx * d, dy * d, dz * d
@@ -249,8 +251,7 @@ class Window(pyglet.window.Window):
         if self.exclusive:
             vector = self.get_sight_vector()
             block, previous = self.model.hit_test(self.position, vector)
-            if (button == mouse.RIGHT) or \
-                    ((button == mouse.LEFT) and (modifiers & key.MOD_CTRL)):
+            if button == mouse.RIGHT or button == mouse.LEFT and modifiers & key.MOD_CTRL:
                 # ON OSX, control + left click = right click.
                 if previous:
                     self.model.add_block(previous, self.block)
@@ -344,49 +345,47 @@ class Window(pyglet.window.Window):
         x, y = self.width // 2, self.height // 2
         n = 10
         self.reticle = pyglet.graphics.vertex_list(4,
-            ('v2i', (x - n, y, x + n, y, x, y - n, x, y + n))
-        )
+                                                   ('v2i', (x - n, y, x + n, y, x, y - n, x, y + n))
+                                                   )
 
     def set_2d(self):
         """ Configure OpenGL to draw in 2d.
 
         """
         width, height = self.get_size()
-        glDisable(GL_DEPTH_TEST)
+        gl.glDisable(gl.GL_DEPTH_TEST)
         viewport = self.get_viewport_size()
-        glViewport(0, 0, max(1, viewport[0]), max(1, viewport[1]))
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
-        glOrtho(0, max(1, width), 0, max(1, height), -1, 1)
-        glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()
+        gl.glViewport(0, 0, max(1, viewport[0]), max(1, viewport[1]))
+        gl.glMatrixMode(gl.GL_PROJECTION)
+        gl.glLoadIdentity()
+        gl.glOrtho(0, max(1, width), 0, max(1, height), -1, 1)
+        gl.glMatrixMode(gl.GL_MODELVIEW)
+        gl.glLoadIdentity()
 
     def set_3d(self):
         """ Configure OpenGL to draw in 3d.
 
         """
         width, height = self.get_size()
-        glEnable(GL_DEPTH_TEST)
+        gl.glEnable(gl.GL_DEPTH_TEST)
         viewport = self.get_viewport_size()
-        glViewport(0, 0, max(1, viewport[0]), max(1, viewport[1]))
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
-        gluPerspective(65.0, width / float(height), 0.1, 60.0)
-        glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()
+        gl.glViewport(0, 0, max(1, viewport[0]), max(1, viewport[1]))
+        gl.glMatrixMode(gl.GL_PROJECTION)
+        gl.glLoadIdentity()
+        gl.gluPerspective(65.0, width / float(height), 0.1, 60.0)
+        gl.glMatrixMode(gl.GL_MODELVIEW)
+        gl.glLoadIdentity()
         x, y = self.rotation
-        glRotatef(x, 0, 1, 0)
-        glRotatef(-y, math.cos(math.radians(x)), 0, math.sin(math.radians(x)))
+        gl.glRotatef(x, 0, 1, 0)
+        gl.glRotatef(-y, math.cos(math.radians(x)), 0, math.sin(math.radians(x)))
         x, y, z = self.position
-        glTranslatef(-x, -y, -z)
+        gl.glTranslatef(-x, -y, -z)
 
     def on_draw(self):
-        """ Called by pyglet to draw the canvas.
-
-        """
+        """Called by pyglet to draw the canvas."""
         self.clear()
         self.set_3d()
-        glColor3d(1, 1, 1)
+        gl.glColor3d(1, 1, 1)
         self.model.batch.draw()
         self.draw_focused_block()
         self.set_2d()
@@ -403,10 +402,10 @@ class Window(pyglet.window.Window):
         if block:
             x, y, z = block
             vertex_data = cube_vertices(x, y, z, 0.51)
-            glColor3d(0, 0, 0)
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
-            pyglet.graphics.draw(24, GL_QUADS, ('v3f/static', vertex_data))
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
+            gl.glColor3d(0, 0, 0)
+            gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_LINE)
+            pyglet.graphics.draw(24, gl.GL_QUADS, ('v3f/static', vertex_data))
+            gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_FILL)
 
     def draw_label(self):
         """ Draw the label in the top left of the screen.
@@ -422,5 +421,5 @@ class Window(pyglet.window.Window):
         """ Draw the crosshairs in the center of the screen.
 
         """
-        glColor3d(0, 0, 0)
-        self.reticle.draw(GL_LINES)
+        gl.glColor3d(0, 0, 0)
+        self.reticle.draw(gl.GL_LINES)
