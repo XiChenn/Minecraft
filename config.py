@@ -13,7 +13,7 @@ TERMINAL_VELOCITY = 50
 
 PLAYER_HEIGHT = 2
 
-TEXTURE_PATH = 'texture.png'
+TEXTURE_PATH = 'resources/texture.png'
 
 FACES = [
     (0, 1, 0),

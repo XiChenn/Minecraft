@@ -2,8 +2,8 @@ import pyglet.gl as gl
 import pyglet
 
 from pyglet.window import key, mouse
-from world import Model
-from utils import *
+from src.world import Model
+from src.utils import *
 from config import FLYING_SPEED, WALKING_SPEED, TERMINAL_VELOCITY, PLAYER_HEIGHT, FACES, TICKS_PER_SEC
 
 

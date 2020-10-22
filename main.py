@@ -1,6 +1,6 @@
 import pyglet.gl as gl
 import pyglet
-from game_window import GameWindow
+from src.game_window import GameWindow
 
 
 # def setup_fog():

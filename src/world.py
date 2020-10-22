@@ -3,7 +3,7 @@ import time
 import pyglet.gl as gl
 import pyglet
 
-from utils import *
+from src.utils import *
 from collections import deque
 from pyglet.graphics import TextureGroup
 from config import FACES, TICKS_PER_SEC, TEXTURE_PATH
